@@ -3,70 +3,119 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert, Acti
 
 export default class Home extends React.Component {
   goToLogin = () => this.props.navigation.navigate('Login')
-  logout = () => {
-    if (AccessToken.getCurrentAccessToken() != null) {
-      LoginManager.logOut()
-    }
-  }
 
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
-      dataSource: null,
-    }
+      time: ''
+    };
   }
 
-  //fetch data
-  componentDidMount() {
-    return fetch('https://facebook.github.io/react-native/movies.json')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson.movies
+  GetTime() {
 
-        })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
+    // Creating variables to hold time.
+    var date, TimeType, hour, minutes, seconds, fullTime;
 
+    // Creating Date() function object.
+    date = new Date();
 
-  render() {
+    // Getting current hour from Date object.
+    hour = date.getHours();
 
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator />
-          <Text>Home</Text>
-          <Button
-            title='Log Out' onPress={this.goToLogin}
-          />
-        </View>
-      )
+    // Checking if the Hour is less than equals to 11 then Set the Time format as AM.
+    if (hour <= 11) {
+
+      TimeType = 'AM';
+
     }
-
     else {
-      let movies = this.state.dataSource.map((val, key) => {
-        return <View key={key} style={styles.item}>
-          <Text>{val.title}</Text>
-        </View>
-      });
-      return (
-        <View style={styles.container}>
-          <Text style={{ fontSize: 30, fontWeight: 'bold' }}> Movie Titles</Text>
-          {movies}
-          <Button
-            title='Log Out' onPress={this.goToLogin}
-          />
-        </View>
-      )
+
+      // If the Hour is Not less than equals to 11 then Set the Time format as PM.
+      TimeType = 'PM';
+
     }
+    // IF current hour is grater than 12 then minus 12 from current hour to make it in 12 Hours Format.
+    if (hour > 12) {
+      hour = hour - 12;
+    }
+    // If hour value is 0 then by default set its value to 12, because 24 means 0 in 24 hours time format. 
+    if (hour == 0) {
+      hour = 12;
+    }
+    // Getting the current minutes from date object.
+    minutes = date.getMinutes();
+
+    // Checking if the minutes value is less then 10 then add 0 before minutes.
+    if (minutes < 10) {
+      minutes = '0' + minutes.toString();
+    }
+
+    //Getting current seconds from date object.
+    seconds = date.getSeconds();
+
+    // If seconds value is less than 10 then add 0 before seconds.
+    if (seconds < 10) {
+      seconds = '0' + seconds.toString();
+    }
+    // Adding all the variables in fullTime variable.
+    fullTime = hour.toString() + ':' + minutes.toString() + ' ' + TimeType.toString();
+    // Setting up fullTime variable in State.
+    this.setState({
+      time: fullTime
+    });
+  }
+
+
+  componentDidMount() {
+    this.Clock = setInterval(() => this.GetTime(), 1000);
+    var that = this;
+
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    that.setState({
+      //Setting the value of the date time
+      date:
+        date + ',' + year,
+    });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.Clock);
+  }
+  render() {
+    //const { navigation } = this.props;
+    const intime = this.props.navigation.getParam('timein', 'nothing sent');
+
+    const d = new Date();
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"];
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var dayName = days[d.getDay()];
+
+    //document.write("The current month is " +);
+    return (
+
+     
+      <View style={styles.MainContainer}>
+
+        <Text style={styles.TextStyle}> {this.state.time} </Text>
+        {/* <Text>Timed in at:{JSON.stringify(navigation.getParam('timein','default value'))} </Text> */}
+        <Text style={styles.bordertext}>Timed-in at: {intime}</Text>
+          <Text
+            style={{
+              fontSize: 20,
+             
+            }}>
+            {dayName + ', ' + monthNames[d.getMonth()] + ' ' + this.state.date}
+          </Text>
+      </View>
+    );
   }
 }
 
+
+//this.state.time.toString()
 const styles = StyleSheet.create({
   container: {
     marginTop: 150,
@@ -76,13 +125,27 @@ const styles = StyleSheet.create({
     height: 300,
     width: 400
   },
-  item: {
-    flex: 1,
-    alignSelf: 'stretch',
-    margin: 10,
-    alignItems: 'center',
+  MainContainer:
+  {
     justifyContent: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee'
+    alignItems: 'center',
+    flex: 1,
+    margin: 10
+
+  },
+  TextStyle:
+  {
+    fontSize: 26,
+    textAlign: 'center',
+    color: '#009688',
+    marginBottom: 20,
+  },
+  bordertext: {
+    backgroundColor: '#d3d3d3',
+    borderRadius:3,
+    padding:5,
+    fontSize: 15,
+
   }
 })
+
