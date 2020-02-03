@@ -11,7 +11,7 @@ export default class Home extends React.Component {
       time: ''
     };
   }
-  
+
   GetTime() {
 
     // Creating variables to hold time.
@@ -101,19 +101,20 @@ export default class Home extends React.Component {
     //document.write("The current month is " +);
     return (
 
-     
+
       <View style={styles.MainContainer}>
 
         <Text style={styles.TextStyle}> {this.state.time} </Text>
         {/* <Text>Timed in at:{JSON.stringify(navigation.getParam('timein','default value'))} </Text> */}
+       
+        <Text
+          style={{
+            fontSize: 20,
+
+          }}>
+          {dayName + ', ' + monthNames[d.getMonth()] + ' ' + this.state.date}
+        </Text>
         <Text style={styles.bordertext}>Timed-in at: {intime}</Text>
-          <Text
-            style={{
-              fontSize: 20,
-             
-            }}>
-            {dayName + ', ' + monthNames[d.getMonth()] + ' ' + this.state.date}
-          </Text>
       </View>
     );
   }
@@ -140,16 +141,20 @@ const styles = StyleSheet.create({
   },
   TextStyle:
   {
-    fontSize: 26,
+    fontSize: 34,
     textAlign: 'center',
-    color: '#009688',
-    marginBottom: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   bordertext: {
     backgroundColor: '#d3d3d3',
-    borderRadius:3,
-    padding:5,
+    borderRadius: 25,
+    padding: 5,
     fontSize: 15,
+    paddingLeft:25,
+    paddingRight:25,
+    padding:10,
+    margin:10
 
   }
 })
