@@ -1,6 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert, ActivityIndicator, Button } from 'react-native'
-
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert, ActivityIndicator, Button, Settings } from 'react-native'
 export default class Home extends React.Component {
   goToLogin = () => this.props.navigation.navigate('Login')
 
@@ -83,6 +82,10 @@ export default class Home extends React.Component {
   componentWillUnmount() {
     clearInterval(this.Clock);
   }
+
+
+
+
   render() {
     //const { navigation } = this.props;
     const intime = this.props.navigation.getParam('timein', 'nothing sent');
