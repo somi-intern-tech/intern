@@ -1,7 +1,16 @@
 import React from 'react'
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native'
 
-
+const DismissKeyboardHOC = (Comp) => {
+  return ({ children, ...props }) => (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <Comp {...props}>
+        {children}
+      </Comp>
+    </TouchableWithoutFeedback>
+  );
+};
+const DismissKeyboardView = DismissKeyboardHOC(View)
 export default class Login extends React.Component {
 
   constructor(props) {
@@ -104,7 +113,7 @@ export default class Login extends React.Component {
   }
 
   handlePasswordChange = password => {
-    this.setState ({ password })
+    this.setState({ password })
   }
 
 
@@ -115,7 +124,7 @@ export default class Login extends React.Component {
     }
     const {
       username,
-      password,time
+      password, time
     } = this.state
 
     fetch('http://demo2276663.mockable.io/data', {
@@ -128,10 +137,10 @@ export default class Login extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.validation === "hello") {
-          
-          alert(responseJson.validation + " --"+this.state.time.toString())
-          
-          this.props.navigation.navigate('Home',{timein: time})
+
+          alert(responseJson.validation + " --" + this.state.time.toString())
+
+          this.props.navigation.navigate('Home', { timein: time })
         }
         else {
           alert("error")
@@ -184,68 +193,76 @@ export default class Login extends React.Component {
 
       <View style={styles.container}>
 
-        <Image source={require('../Images/propelrr.jpg')}
-          style={styles.image} />
-
-        <View style={styles.container1}>
-          <Text style={{ color: 'red' }}>{this.state.a}</Text>
-          <View style={styles.input}>
-            <TextInput
-              name='username'
-              value={this.state.username}
-              placeholder='Username'
-              autoCapitalize='none'
-              onChangeText={this.handleUsernameChange}
-
-
-            />
+        <DismissKeyboardView>
+          <View style={styles.con}>
+            <Image source={require('../Images/propelrrlogo.png')}
+              style={styles.image} />
           </View>
-          <View style={styles.input}>
-            <TextInput
-              name='password'
-              value={this.state.password}
-              placeholder='Password'
-              secureTextEntry
-              onChangeText={this.handlePasswordChange}
-            />
+          <View style={styles.container1}>
+            <Text style={{ color: 'red' }}>{this.state.a}</Text>
+            <View style={styles.input}>
+
+
+              <TextInput
+                name='username'
+                value={this.state.username}
+                placeholder='Username'
+                autoCapitalize='none'
+                onChangeText={this.handleUsernameChange}
+
+
+              />
+            </View>
+            <View style={styles.input}>
+
+              <TextInput
+                name='password'
+                value={this.state.password}
+                placeholder='Password'
+                secureTextEntry
+                onChangeText={this.handlePasswordChange}
+              />
+
+            </View>
+
+            <TouchableOpacity style={styles.button}
+              onPress={() => {
+                const {
+                  username,
+                  password
+                } = this.state
+                // this.state.dataSource.map((val) => {
+
+                //   if (username == val.user && password == val.password) {
+                //     this.onLogin()
+                //   }
+                //   else if (username.length == 0 || password.length == 0) {
+                //     // this.setState.a = "Please enter your user and password"
+                //     this.errorto()
+
+                //   }
+                //   else {
+                //     this.errorto()
+
+                //   }
+
+
+
+                // })\
+                this.errorto()
+              }
+
+
+
+              }
+
+
+            >
+              <Text style={{ fontWeight: 'bold', color: 'white' }}> LOGIN </Text>
+            </TouchableOpacity>
           </View>
+        </DismissKeyboardView>
 
-          <TouchableOpacity style={styles.button}
-            onPress={() => {
-              const {
-                username,
-                password
-              } = this.state
-              // this.state.dataSource.map((val) => {
-
-              //   if (username == val.user && password == val.password) {
-              //     this.onLogin()
-              //   }
-              //   else if (username.length == 0 || password.length == 0) {
-              //     // this.setState.a = "Please enter your user and password"
-              //     this.errorto()
-
-              //   }
-              //   else {
-              //     this.errorto()
-
-              //   }
-
-
-
-              // })\
-              this.errorto()
-            }
-
-
-
-            }
-
-
-          >
-            <Text style={{ fontWeight: 'bold', color: 'white' }}> LOGIN </Text>
-          </TouchableOpacity>
-        </View>
       </View>
 
     )
@@ -277,9 +294,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 200,
     height: 250,
     width: 250,
     resizeMode: 'stretch',
@@ -307,5 +323,9 @@ const styles = StyleSheet.create({
     shadowOpacity: .3,
     padding: 25
   },
+  con:{
+   justifyContent:'center',
+   alignItems:'center'
+  }
 })
 

@@ -1,6 +1,7 @@
 import { createStackNavigator, HeaderTitle } from 'react-navigation-stack'
 import Login from '../screens/Login'
 import Signup from '../screens/Signup'
+
 import { Header } from 'react-native/Libraries/NewAppScreen'
 
 const AuthNavigation = createStackNavigator(
@@ -15,8 +16,8 @@ const AuthNavigation = createStackNavigator(
       screen: Signup, navigationOptions: {
         headerShown: false
       }
-    }
-
+    },
+   
 
   },
   {
@@ -24,5 +25,4 @@ const AuthNavigation = createStackNavigator(
 
   }
 )
-
 export default AuthNavigation
